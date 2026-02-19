@@ -2,6 +2,9 @@ services:
   - type: web
     name: crystell-backend
     env: node
+    plan: free
+    region: singapore
+    numInstances: 1
     rootDir: backend
     buildCommand: npm install && npm run build
     startCommand: npm run start
@@ -9,11 +12,13 @@ services:
       - key: FIREBASE_SERVICE_ACCOUNT_JSON
         sync: false
       - key: PORT
-        value: 10000
+        value: "10000"
 
   - type: static
     name: crystell-frontend
     env: static
+    plan: free
+    region: singapore
     rootDir: frontend
     buildCommand: npm install && npm run build
     staticPublishPath: dist
