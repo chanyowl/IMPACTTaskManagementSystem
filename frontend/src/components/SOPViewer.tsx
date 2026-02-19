@@ -4,7 +4,7 @@
  * Displays full SOP content with version history and related SOPs
  */
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import type { SOP, SOPVersion } from '../services/sopApi';
 import {
   getSOPVersions,
@@ -122,15 +122,14 @@ export default function SOPViewer({ sop, onEdit, onClose }: SOPViewerProps) {
         <div className="flex items-start justify-between mb-3">
           <div>
             <div className="flex items-center gap-3 mb-2">
-              <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                sop.category === 'process' ? 'bg-blue-100 text-blue-700' :
-                sop.category === 'guideline' ? 'bg-green-100 text-green-700' :
-                sop.category === 'policy' ? 'bg-red-100 text-red-700' :
-                sop.category === 'tutorial' ? 'bg-purple-100 text-purple-700' :
-                sop.category === 'reference' ? 'bg-yellow-100 text-yellow-700' :
-                sop.category === 'template' ? 'bg-pink-100 text-pink-700' :
-                'bg-gray-100 text-gray-700'
-              }`}>
+              <span className={`px-3 py-1 rounded-full text-sm font-semibold ${sop.category === 'process' ? 'bg-blue-100 text-blue-700' :
+                  sop.category === 'guideline' ? 'bg-green-100 text-green-700' :
+                    sop.category === 'policy' ? 'bg-red-100 text-red-700' :
+                      sop.category === 'tutorial' ? 'bg-purple-100 text-purple-700' :
+                        sop.category === 'reference' ? 'bg-yellow-100 text-yellow-700' :
+                          sop.category === 'template' ? 'bg-pink-100 text-pink-700' :
+                            'bg-gray-100 text-gray-700'
+                }`}>
                 {sop.category}
               </span>
               {sop.isTemplate && (

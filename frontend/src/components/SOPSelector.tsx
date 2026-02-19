@@ -4,7 +4,7 @@
  * Select SOPs to link to tasks
  */
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import type { SOP } from '../services/sopApi';
 import { listSOPs, searchSOPs } from '../services/sopApi';
 
