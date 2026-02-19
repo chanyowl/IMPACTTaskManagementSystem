@@ -2,11 +2,11 @@ import { initializeApp, cert } from 'firebase-admin/app';
 import { getFirestore, Timestamp } from 'firebase-admin/firestore';
 import * as dotenv from 'dotenv';
 import { v4 as uuidv4 } from 'uuid';
-import { createRequire } from 'module';
+// import { createRequire } from 'module';
 
 dotenv.config();
 
-const require = createRequire(import.meta.url);
+// const require = createRequire(import.meta.url);
 const serviceAccount = require('../../serviceAccountKey.json');
 
 initializeApp({
