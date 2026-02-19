@@ -4,7 +4,10 @@
  * Frontend service for communicating with Task Management System backend
  */
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001';
+let API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001';
+if (API_BASE_URL && !API_BASE_URL.startsWith('http')) {
+  API_BASE_URL = `https://${API_BASE_URL}`;
+}
 
 export interface TaskManagement {
   taskId: string;

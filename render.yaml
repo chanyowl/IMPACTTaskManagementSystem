@@ -18,7 +18,6 @@ services:
     name: crystell-frontend
     env: static
     plan: free
-    region: singapore
     rootDir: frontend
     buildCommand: npm install && npm run build
     staticPublishPath: dist
@@ -27,4 +26,4 @@ services:
         fromService:
           type: web
           name: crystell-backend
-          property: url
+          property: host
