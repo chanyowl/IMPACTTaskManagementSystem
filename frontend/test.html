@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Crystell Test</title>
+    <style>
+        body {
+            font-family: system-ui;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .message {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+        }
+        .user {
+            background: #3b82f6;
+            color: white;
+            text-align: right;
+        }
+        .crystell {
+            background: #f3f4f6;
+        }
+        input {
+            width: 70%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #2563eb;
+        }
+    </style>
+</head>
+<body>
+    <h1>Crystell - Direct Test</h1>
+    <div id="messages"></div>
+    <div style="margin-top: 20px;">
+        <input type="text" id="messageInput" placeholder="Type your message...">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+
+    <script>
+        const messagesDiv = document.getElementById('messages');
+        const input = document.getElementById('messageInput');
+
+        // Add initial message
+        addMessage('crystell', "Hi! I'm Crystell. Just dump everything that's on your mind right now—work, life, chores. Messy is fine.");
+
+        function addMessage(sender, text) {
+            const div = document.createElement('div');
+            div.className = 'message ' + sender;
+            div.textContent = text;
+            messagesDiv.appendChild(div);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        async function sendMessage() {
+            const text = input.value.trim();
+            if (!text) return;
+
+            addMessage('user', text);
+            input.value = '';
+
+            try {
+                const response = await fetch('http://localhost:3001/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: text, userId: 'test-user' })
+                });
+                const data = await response.json();
+                addMessage('crystell', data.response);
+            } catch (error) {
+                addMessage('crystell', 'Error: Cannot connect to backend. Make sure it is running on port 3001.');
+                console.error(error);
+            }
+        }
+
+        input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+    </script>
+</body>
+</html>

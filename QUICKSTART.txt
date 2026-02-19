@@ -1,0 +1,65 @@
+╔══════════════════════════════════════════════════════════════════╗
+║                     CRYSTELL - QUICK START                       ║
+╚══════════════════════════════════════════════════════════════════╝
+
+🎯 WHAT IS CRYSTELL?
+A conversational AI that learns your personality and suggests tasks based on your current energy and mood.
+
+📋 BEFORE YOU START - You Need:
+1. Anthropic API key (Claude) - Get from: https://console.anthropic.com/settings/keys
+2. Firebase project with Firestore enabled - Create at: https://console.firebase.google.com
+3. Firebase service account key (JSON file)
+4. Node.js 18+ installed
+
+⚡ QUICK SETUP (5 minutes):
+
+STEP 1: Configure Backend
+  - Open: backend/.env
+  - Add your Anthropic API key (replace: your_claude_api_key_here)
+  - Download serviceAccountKey.json from Firebase
+  - Place serviceAccountKey.json in backend/ folder
+
+STEP 2: Configure Frontend
+  - Open: frontend/.env
+  - Add your Firebase config values (get from Firebase Console)
+
+STEP 3: Check Setup
+  - Run: node check-setup.js
+  - This will verify all files are in place
+
+STEP 4: Start Backend (Terminal 1)
+  cd backend
+  npm run dev
+
+STEP 5: Start Frontend (Terminal 2)
+  cd frontend
+  npm run dev
+
+STEP 6: Open Browser
+  http://localhost:5173
+
+🎉 THAT'S IT! Start chatting with Crystell.
+
+📖 DETAILED HELP:
+  - SETUP_GUIDE.md - Step-by-step setup instructions
+  - README.md - Full documentation
+  - CRYSTELL_PRODUCT_PLAN.md - Product vision and design
+
+❓ TROUBLESHOOTING:
+  - Backend won't start? Check your API keys in backend/.env
+  - Firebase errors? Make sure serviceAccountKey.json is valid
+  - Frontend can't connect? Ensure backend is running on port 3001
+
+🔒 SECURITY:
+  Never commit .env files or serviceAccountKey.json to Git!
+  The .gitignore is already configured to protect these files.
+
+💬 FIRST MESSAGE IDEAS:
+  "I need to finish my quarterly report, fix a bug, call mom, and go shopping"
+  "I have a presentation tomorrow and I'm feeling anxious about it"
+  "I crushed my morning tasks! What's next?"
+
+Crystell will learn your patterns and suggest tasks that fit your current state.
+
+═══════════════════════════════════════════════════════════════════
+Built with Claude API, React, Firebase, and TypeScript
