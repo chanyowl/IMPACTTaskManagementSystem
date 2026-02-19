@@ -30,11 +30,20 @@ async function listModels() {
 
         console.log('Checking available models via API...');
         const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
-        const data = await response.json();
+        interface Model {
+            name: string;
+            displayName: string;
+        }
+
+        interface ModelsResponse {
+            models?: Model[];
+        }
+
+        const data = await response.json() as ModelsResponse;
 
         if (data.models) {
             console.log('Available Models:');
-            data.models.forEach(m => {
+            data.models.forEach((m: Model) => {
                 if (m.name.includes('gemini')) {
                     console.log(`- ${m.name.replace('models/', '')} (${m.displayName})`);
                 }
