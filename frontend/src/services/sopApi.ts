@@ -4,7 +4,7 @@
  * Frontend service for SOP operations
  */
 
-const API_URL = 'http://localhost:3001/api';
+const API_URL = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001') + '/api';
 
 /**
  * SOP Types (matching backend)

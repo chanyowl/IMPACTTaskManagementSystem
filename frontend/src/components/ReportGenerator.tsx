@@ -14,7 +14,7 @@ import { getObjectives, type Objective, type TaskManagement } from '../services/
 // @ts-ignore
 import html2pdf from 'html2pdf.js';
 
-const API_BASE_URL = 'http://localhost:3001/api';
+const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001') + '/api';
 
 interface ReportGeneratorProps {
     // No props needed for standalone tab

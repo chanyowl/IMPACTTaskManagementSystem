@@ -5,7 +5,7 @@
  * Phase 3: Layer 6 AI Behavior Model
  */
 
-const API_BASE = 'http://localhost:3001/api/ai';
+const API_BASE = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001') + '/api/ai';
 
 /**
  * AI Proposal Structure
