@@ -5,7 +5,7 @@
  * Uses AI for narrative generation and audit logs for quantitative performance.
  */
 
-import React, { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
@@ -152,9 +152,9 @@ export default function ReportGenerator({ }: ReportGeneratorProps) {
             const opt = {
                 margin: 0.5,
                 filename: filename,
-                image: { type: 'jpeg', quality: 0.98 },
+                image: { type: 'jpeg' as 'jpeg', quality: 0.98 },
                 html2canvas: { scale: 2 },
-                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' as 'portrait' }
             };
 
             await html2pdf().set(opt).from(element).save();

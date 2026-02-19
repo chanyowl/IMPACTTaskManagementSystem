@@ -4,7 +4,7 @@
  * Individual task display for Kanban board
  */
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import type { TaskManagement } from '../services/taskManagementApi';
 import { useTaskManagement } from '../context/TaskManagementContext';
 import TaskManagementDetails from './TaskManagementDetails';

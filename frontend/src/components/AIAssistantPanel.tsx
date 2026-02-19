@@ -7,9 +7,9 @@
  * CRITICAL: AI NEVER auto-creates tasks - always requires human approval
  */
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useTaskManagement } from '../context/TaskManagementContext';
-import type { AIProposal, AIExtractionResult } from '../services/aiApi';
+import type { AIExtractionResult } from '../services/aiApi';
 import { extractActions, checkAIStatus } from '../services/aiApi';
 
 export default function AIAssistantPanel() {

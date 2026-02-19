@@ -4,7 +4,6 @@
  * Displays SOPs in a grid/list view
  */
 
-import React from 'react';
 import type { SOP, SOPCategory } from '../services/sopApi';
 
 interface SOPListProps {

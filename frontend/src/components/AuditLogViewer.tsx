@@ -4,7 +4,6 @@
  * Displays audit history with timeline view and diff
  */
 
-import React from 'react';
 import type { AuditLog } from '../services/taskManagementApi';
 
 interface AuditLogViewerProps {

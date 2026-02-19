@@ -4,7 +4,7 @@
  * Global state management for Task Management System
  */
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
 import type {
   TaskManagement,
   Objective,

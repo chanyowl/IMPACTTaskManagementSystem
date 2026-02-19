@@ -4,7 +4,7 @@
  * Dropdown for selecting objectives with ability to create new ones
  */
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useTaskManagement } from '../context/TaskManagementContext';
 import { createObjective } from '../services/taskManagementApi';
 
