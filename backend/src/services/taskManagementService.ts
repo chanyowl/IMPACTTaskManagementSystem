@@ -313,7 +313,7 @@ export async function restoreTask(
     restoredBy,
     'status_changed', // Using status_changed or generic updated
     currentTask,
-    { ...currentTask, deletedAt: undefined },
+    { ...currentTask, deletedAt: null } as any,
     'Task restored from trash',
     metadata
   );
