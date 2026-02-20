@@ -14,6 +14,28 @@ export default function TaskManagementBoard() {
   const { tasks, loading, error, moveTaskToStatus, refreshTasks } = useTaskManagement();
   const [showTaskForm, setShowTaskForm] = useState(false);
   const [draggedTaskId, setDraggedTaskId] = useState<string | null>(null);
+  const [selectedProject, setSelectedProject] = useState<string>('All Projects');
+
+  const projects = [
+    'All Projects',
+    'IMPACT NXT',
+    'STEP',
+    'HEIRIT',
+    'Lab-In-a-Box',
+    'BlueNest'
+  ];
+
+  // Filter tasks based on selected project
+  const filterTasks = (taskList: typeof tasks.pending) => {
+    if (selectedProject === 'All Projects') return taskList;
+    return taskList.filter(task => task.objective === selectedProject);
+  };
+
+  const filteredTasks = {
+    pending: filterTasks(tasks.pending),
+    active: filterTasks(tasks.active),
+    done: filterTasks(tasks.done)
+  };
 
   const handleDragStart = (taskId: string) => {
     setDraggedTaskId(taskId);
@@ -78,6 +100,15 @@ export default function TaskManagementBoard() {
           </p>
         </div>
         <div className="flex gap-3">
+          <select
+            value={selectedProject}
+            onChange={(e) => setSelectedProject(e.target.value)}
+            className="px-4 py-3 bg-white border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none cursor-pointer"
+          >
+            {projects.map(project => (
+              <option key={project} value={project}>{project}</option>
+            ))}
+          </select>
           <button
             onClick={() => setShowTaskForm(true)}
             className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition-colors shadow-md flex items-center gap-2"
@@ -100,18 +131,18 @@ export default function TaskManagementBoard() {
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold text-gray-800">📋 Pending</h2>
             <span className="bg-yellow-200 text-yellow-800 px-2 py-1 rounded text-sm font-medium">
-              {tasks.pending.length}
+              {filteredTasks.pending.length}
             </span>
           </div>
           <div className="space-y-3">
-            {tasks.pending.map((task) => (
+            {filteredTasks.pending.map((task) => (
               <TaskManagementCard
                 key={task.taskId}
                 task={task}
                 onDragStart={() => handleDragStart(task.taskId)}
               />
             ))}
-            {tasks.pending.length === 0 && (
+            {filteredTasks.pending.length === 0 && (
               <div className="text-center text-gray-400 mt-8">No pending tasks</div>
             )}
           </div>
@@ -126,18 +157,18 @@ export default function TaskManagementBoard() {
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold text-gray-800">🚀 Active</h2>
             <span className="bg-blue-200 text-blue-800 px-2 py-1 rounded text-sm font-medium">
-              {tasks.active.length}
+              {filteredTasks.active.length}
             </span>
           </div>
           <div className="space-y-3">
-            {tasks.active.map((task) => (
+            {filteredTasks.active.map((task) => (
               <TaskManagementCard
                 key={task.taskId}
                 task={task}
                 onDragStart={() => handleDragStart(task.taskId)}
               />
             ))}
-            {tasks.active.length === 0 && (
+            {filteredTasks.active.length === 0 && (
               <div className="text-center text-gray-400 mt-8">No active tasks</div>
             )}
           </div>
@@ -152,18 +183,18 @@ export default function TaskManagementBoard() {
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold text-gray-800">✅ Done</h2>
             <span className="bg-green-200 text-green-800 px-2 py-1 rounded text-sm font-medium">
-              {tasks.done.length}
+              {filteredTasks.done.length}
             </span>
           </div>
           <div className="space-y-3">
-            {tasks.done.map((task) => (
+            {filteredTasks.done.map((task) => (
               <TaskManagementCard
                 key={task.taskId}
                 task={task}
                 onDragStart={() => handleDragStart(task.taskId)}
               />
             ))}
-            {tasks.done.length === 0 && (
+            {filteredTasks.done.length === 0 && (
               <div className="text-center text-gray-400 mt-8">No completed tasks</div>
             )}
           </div>
