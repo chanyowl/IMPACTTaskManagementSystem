@@ -137,6 +137,28 @@ router.get('/stats', async (req: Request, res: Response) => {
 });
 
 /**
+ * GET /api/task-management/trash
+ * Get deleted tasks (Trash Bin)
+ */
+router.get('/trash', async (req: Request, res: Response) => {
+  try {
+    const tasks = await getDeletedTasks();
+
+    res.json({
+      success: true,
+      count: tasks.length,
+      tasks
+    });
+  } catch (error: any) {
+    console.error('Error getting trash:', error);
+    res.status(500).json({
+      error: 'Failed to get trash',
+      message: error.message
+    });
+  }
+});
+
+/**
  * GET /api/task-management/:id
  * Get a specific task
  */
@@ -196,27 +218,7 @@ router.put(
   }
 );
 
-/**
- * GET /api/task-management/trash
- * Get deleted tasks (Trash Bin)
- */
-router.get('/trash', async (req: Request, res: Response) => {
-  try {
-    const tasks = await getDeletedTasks();
 
-    res.json({
-      success: true,
-      count: tasks.length,
-      tasks
-    });
-  } catch (error: any) {
-    console.error('Error getting trash:', error);
-    res.status(500).json({
-      error: 'Failed to get trash',
-      message: error.message
-    });
-  }
-});
 
 /**
  * DELETE /api/task-management/:id/permanent
