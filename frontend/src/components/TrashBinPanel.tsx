@@ -190,7 +190,7 @@ export default function TrashBinPanel({ isOpen, onClose, onTaskRestored }: Trash
                                             <p className="text-sm text-gray-600 mt-1 line-clamp-1">{task.intent || 'No description'}</p>
                                             <div className="flex gap-4 mt-2 text-xs text-gray-400">
                                                 <span>Assignee: {task.assignee}</span>
-                                                <span>Deleted: {new Date(task.updatedAt._seconds * 1000).toLocaleDateString()}</span>
+                                                <span>Deleted: {task.updatedAt && task.updatedAt._seconds ? new Date(task.updatedAt._seconds * 1000).toLocaleDateString() : 'Unknown'}</span>
                                             </div>
                                         </div>
                                     </div>

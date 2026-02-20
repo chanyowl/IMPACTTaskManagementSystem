@@ -212,7 +212,7 @@ export async function getDeletedTasks(): Promise<TaskManagement[]> {
   const response = await fetch(`${API_BASE_URL}/api/task-management/trash`);
 
   if (!response.ok) {
-    throw new Error('Failed to fetch deleted tasks');
+    throw new Error(`Failed to fetch deleted tasks: ${response.status} ${response.statusText}`);
   }
 
   const data = await response.json();
