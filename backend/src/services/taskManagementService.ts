@@ -448,7 +448,11 @@ export async function getTasksByStatus(status: TaskStatus): Promise<TaskManageme
     .get();
 
   // Sort client-side to avoid composite index requirement
-  const tasks = snapshot.docs.map(doc => doc.data() as TaskManagement);
+  let tasks = snapshot.docs.map(doc => doc.data() as TaskManagement);
+
+  // Filter out deleted tasks
+  tasks = tasks.filter(t => !t.deletedAt);
+
   return tasks.sort((a, b) => {
     const aTime = a.dueDate.toMillis();
     const bTime = b.dueDate.toMillis();
@@ -485,7 +489,8 @@ export async function getOverdueTasks(): Promise<TaskManagement[]> {
     .where('status', 'in', ['Pending', 'Active'])
     .get();
 
-  return snapshot.docs.map(doc => doc.data() as TaskManagement);
+  let tasks = snapshot.docs.map(doc => doc.data() as TaskManagement);
+  return tasks.filter(t => !t.deletedAt);
 }
 
 /**
@@ -512,7 +517,10 @@ export async function getTaskStats(filters?: {
   }
 
   const snapshot = await query.get();
-  const tasks = snapshot.docs.map(doc => doc.data() as TaskManagement);
+  let tasks = snapshot.docs.map(doc => doc.data() as TaskManagement);
+
+  // Filter out deleted tasks
+  tasks = tasks.filter(t => !t.deletedAt);
 
   const now = Date.now();
 
