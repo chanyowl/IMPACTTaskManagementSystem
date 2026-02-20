@@ -171,6 +171,9 @@ export async function listTasks(filters?: TaskFilters): Promise<TaskManagement[]
     );
   }
 
+  // EXCLUDE DELETED TASKS (Trash Bin logic)
+  tasks = tasks.filter(task => !task.deletedAt);
+
   return tasks;
 }
 
@@ -250,7 +253,7 @@ export async function updateTask(
 
 /**
  * Delete a task (soft delete)
- * CRITICAL: Creates audit log and unlinks from objective
+ * CRITICAL: Creates audit log and marks as deleted
  */
 export async function deleteTask(
   taskId: string,
@@ -270,17 +273,108 @@ export async function deleteTask(
     deletedBy,
     'deleted',
     currentTask,
-    null as any, // No new state since task is being deleted
-    reason || 'Task deleted',
+    { ...currentTask, deletedAt: Timestamp.now() },
+    reason || 'Task moved to trash',
     metadata
   );
 
-  // Step 3: Unlink from objective
+  // Step 3: Soft delete - update deletedAt timestamp
+  await db.collection(TASKS_COLLECTION).doc(taskId).update({
+    deletedAt: FieldValue.serverTimestamp(),
+    deletedBy: deletedBy,
+    updatedAt: FieldValue.serverTimestamp()
+  });
+}
+
+/**
+ * Restore a task from trash
+ */
+export async function restoreTask(
+  taskId: string,
+  restoredBy: string,
+  metadata?: { ipAddress?: string; userAgent?: string }
+): Promise<void> {
+  const currentTask = await getTask(taskId);
+  if (!currentTask) {
+    throw new Error(`Task ${taskId} not found`);
+  }
+
+  // Remove deletedAt field
+  await db.collection(TASKS_COLLECTION).doc(taskId).update({
+    deletedAt: FieldValue.delete(),
+    deletedBy: FieldValue.delete(),
+    updatedAt: FieldValue.serverTimestamp(),
+    lastModifiedBy: restoredBy
+  });
+
+  // Audit log
+  await createAuditLog(
+    taskId,
+    restoredBy,
+    'status_changed', // Using status_changed or generic updated
+    currentTask,
+    { ...currentTask, deletedAt: undefined },
+    'Task restored from trash',
+    metadata
+  );
+}
+
+/**
+ * Permanently delete a task
+ */
+export async function permanentlyDeleteTask(
+  taskId: string,
+  deletedBy: string,
+  metadata?: { ipAddress?: string; userAgent?: string }
+): Promise<void> {
+  const currentTask = await getTask(taskId);
+  if (!currentTask) {
+    throw new Error(`Task ${taskId} not found`);
+  }
+
+  // Audit log (final record)
+  await createAuditLog(
+    taskId,
+    deletedBy,
+    'deleted',
+    currentTask,
+    null as any,
+    'Task permanently deleted',
+    metadata
+  );
+
+  // Unlink from objective
   await unlinkTaskFromObjective(currentTask.objective, taskId);
 
-  // Step 4: Hard delete - actually remove from database
+  // Hard delete
   await db.collection(TASKS_COLLECTION).doc(taskId).delete();
 }
+
+/**
+ * Get deleted tasks (Trash Bin)
+ */
+export async function getDeletedTasks(): Promise<TaskManagement[]> {
+  // We can't easily query for non-null in basic firestore without composite index sometimes
+  // So we'll query all and filter, OR simply query 'deletedAt' > 0 if feasible.
+  // Easiest for now: order by deletedAt
+  try {
+    const snapshot = await db.collection(TASKS_COLLECTION)
+      .orderBy('deletedAt', 'desc')
+      .get();
+
+    return snapshot.docs.map(doc => doc.data() as TaskManagement);
+  } catch (e) {
+    // If index missing, fallback: fetch all and filter client side (not efficient but safe for v1)
+    // Actually, let's just use the fact that we can filter listTasks to NOT show them, 
+    // and here we want ONLY them.
+    // A query for orderBy('deletedAt') implies deletedAt exists.
+    const snapshot = await db.collection(TASKS_COLLECTION).get();
+    return snapshot.docs
+      .map(doc => doc.data() as TaskManagement)
+      .filter(t => !!t.deletedAt);
+  }
+}
+
 
 /**
  * Link two tasks together (soft relationship)

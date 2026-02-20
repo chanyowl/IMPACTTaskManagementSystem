@@ -9,10 +9,12 @@ import React, { useState } from 'react';
 import { useTaskManagement } from '../context/TaskManagementContext';
 import TaskManagementCard from './TaskManagementCard';
 import TaskManagementForm from './TaskManagementForm';
+import TrashBinPanel from './TrashBinPanel';
 
 export default function TaskManagementBoard() {
   const { tasks, loading, error, moveTaskToStatus, refreshTasks } = useTaskManagement();
   const [showTaskForm, setShowTaskForm] = useState(false);
+  const [showTrash, setShowTrash] = useState(false);
   const [draggedTaskId, setDraggedTaskId] = useState<string | null>(null);
   const [selectedProject, setSelectedProject] = useState<string>('All Projects');
 
@@ -211,6 +213,22 @@ export default function TaskManagementBoard() {
           }}
         />
       )}
+
+      {/* Trash Bin Button (Floating Bottom Left) */}
+      <button
+        onClick={() => setShowTrash(true)}
+        className="fixed bottom-6 left-6 p-4 bg-white text-gray-600 rounded-full shadow-lg hover:shadow-xl hover:text-red-500 hover:bg-red-50 transition-all border border-gray-200 z-40 group"
+        title="Open Trash Bin"
+      >
+        <span className="text-2xl group-hover:scale-110 transition-transform block">🗑️</span>
+      </button>
+
+      {/* Trash Bin Panel */}
+      <TrashBinPanel
+        isOpen={showTrash}
+        onClose={() => setShowTrash(false)}
+        onTaskRestored={() => refreshTasks()}
+      />
     </div>
   );
 }

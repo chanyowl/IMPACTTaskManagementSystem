@@ -39,7 +39,12 @@ export interface TaskManagement {
   // === COMPUTED FIELDS (from architecture) ===
   cognitiveLoad?: 'high' | 'low';          // For AI integration (Phase 3)
   emotionalWeight?: 'scary' | 'neutral';   // For AI integration (Phase 3)
+
+  // === TRASH BIN FIELDS ===
+  deletedAt?: Timestamp;                    // When task was soft-deleted
+  deletedBy?: string;                       // Who deleted it
 }
+
 
 export type TaskStatus = 'Pending' | 'Active' | 'Done';
 

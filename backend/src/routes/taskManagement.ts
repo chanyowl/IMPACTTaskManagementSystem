@@ -14,7 +14,10 @@ import {
   getAllTasksGroupedByStatus,
   getTaskStats,
   linkTasks,
-  unlinkTasks
+  unlinkTasks,
+  restoreTask,
+  permanentlyDeleteTask,
+  getDeletedTasks
 } from '../services/taskManagementService.js';
 import { getTaskAuditHistory } from '../services/auditService.js';
 import {
@@ -194,6 +197,86 @@ router.put(
 );
 
 /**
+ * GET /api/task-management/trash
+ * Get deleted tasks (Trash Bin)
+ */
+router.get('/trash', async (req: Request, res: Response) => {
+  try {
+    const tasks = await getDeletedTasks();
+
+    res.json({
+      success: true,
+      count: tasks.length,
+      tasks
+    });
+  } catch (error: any) {
+    console.error('Error getting trash:', error);
+    res.status(500).json({
+      error: 'Failed to get trash',
+      message: error.message
+    });
+  }
+});
+
+/**
+ * DELETE /api/task-management/:id/permanent
+ * Permanently delete a task
+ */
+router.delete(
+  '/:id/permanent',
+  extractRequestMetadata,
+  async (req: Request, res: Response) => {
+    try {
+      const id = req.params.id as string;
+      const userId = (req as any).userId || 'system';
+      const metadata = (req as any).metadata;
+
+      await permanentlyDeleteTask(id, userId, metadata);
+
+      res.json({
+        success: true,
+        message: 'Task permanently deleted'
+      });
+    } catch (error: any) {
+      console.error('Error permanently deleting task:', error);
+      res.status(400).json({
+        error: 'Failed to permanently delete task',
+        message: error.message
+      });
+    }
+  }
+);
+
+/**
+ * POST /api/task-management/:id/restore
+ * Restore a task from trash
+ */
+router.post(
+  '/:id/restore',
+  extractRequestMetadata,
+  async (req: Request, res: Response) => {
+    try {
+      const id = req.params.id as string;
+      const userId = (req as any).userId || 'system';
+      const metadata = (req as any).metadata;
+
+      await restoreTask(id, userId, metadata);
+
+      res.json({
+        success: true,
+        message: 'Task restored successfully'
+      });
+    } catch (error: any) {
+      console.error('Error restoring task:', error);
+      res.status(400).json({
+        error: 'Failed to restore task',
+        message: error.message
+      });
+    }
+  }
+); // End of restore route
+
+/**
  * DELETE /api/task-management/:id
  * Delete a task (soft delete)
  */
@@ -211,7 +294,7 @@ router.delete(
 
       res.json({
         success: true,
-        message: 'Task deleted successfully'
+        message: 'Task moved to trash'
       });
     } catch (error: any) {
       console.error('Error deleting task:', error);
