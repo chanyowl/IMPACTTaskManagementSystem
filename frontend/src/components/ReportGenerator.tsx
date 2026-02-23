@@ -31,7 +31,7 @@ const IMPACT_NXT_MEMBERS = [
 const ADMIN_MEMBERS = [
     'Jon',
     'Dana',
-    'Wilma'
+    'Daniella'
 ];
 
 const FULL_NAME_MAPPING: Record<string, string> = {
@@ -42,7 +42,7 @@ const FULL_NAME_MAPPING: Record<string, string> = {
     'Josh': 'Joshua Guico',
     'Jon': 'Jon Fernandez',
     'Dana': 'Dana Steffany Natiola',
-    'Wilma': 'Wilma Alamar'
+    'Daniella': 'Daniella Guerrero'
 };
 
 const ASSIGNEE_ALIASES: Record<string, string> = {
@@ -50,7 +50,7 @@ const ASSIGNEE_ALIASES: Record<string, string> = {
     'Josh': 'Josh,Joshua',
     'Jon': 'Jon,jon,doc Jon',
     'Dana': 'Dana,dana',
-    'Wilma': 'Wilma,wilma,Wilms,ganda'
+    'Daniella': 'Daniella,daniella,dani'
 };
 
 export default function ReportGenerator({ }: ReportGeneratorProps) {
@@ -104,10 +104,26 @@ export default function ReportGenerator({ }: ReportGeneratorProps) {
 
 
     const getOfficerPosition = () => {
-        if (selectedAssignee && FULL_NAME_MAPPING[selectedAssignee]) {
-            return 'Project Technical Assistant II';
+        if (selectedAssignee) {
+            switch (selectedAssignee) {
+                // IMPACT NXT Team
+                case 'Mica':
+                case 'Crystelle':
+                case 'Trixie':
+                case 'Chan':
+                case 'Josh':
+                    return 'Project Technical Assistant II';
+
+                // ADMIN Team
+                case 'Jon':
+                    return 'AIPO Director';
+                case 'Dana':
+                    return 'Administrative Assistant';
+                case 'Daniella':
+                    return 'Marketing Specialist';
+            }
         }
-        return 'Digital Marketing Specialist';
+        return 'Project Technical Assistant II'; // Default fallback
     };
 
     const handleGeneratePreview = async () => {
