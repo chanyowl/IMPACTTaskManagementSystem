@@ -34,6 +34,12 @@ const ADMIN_MEMBERS = [
     'Daniella'
 ];
 
+const PEG_MEMBERS = [
+    'Vanessa',
+    'Elaine',
+    'Cha'
+];
+
 const FULL_NAME_MAPPING: Record<string, string> = {
     'Mica': 'Mica Ella Figueroa',
     'Crystelle': 'Crystelle Jel Soriano',
@@ -42,7 +48,10 @@ const FULL_NAME_MAPPING: Record<string, string> = {
     'Josh': 'Joshua Guico',
     'Jon': 'Jon Fernandez',
     'Dana': 'Dana Steffany Natiola',
-    'Daniella': 'Daniella Guerrero'
+    'Daniella': 'Daniella Guerrero',
+    'Vanessa': 'Vanessa Malapit',
+    'Elaine': 'Madielaine Fatallo',
+    'Cha': 'Charity Bersalona'
 };
 
 const ASSIGNEE_ALIASES: Record<string, string> = {
@@ -50,7 +59,10 @@ const ASSIGNEE_ALIASES: Record<string, string> = {
     'Josh': 'Josh,Joshua',
     'Jon': 'Jon,jon,doc Jon',
     'Dana': 'Dana,dana',
-    'Daniella': 'Daniella,daniella,dani'
+    'Daniella': 'Daniella,daniella,dani',
+    'Vanessa': 'Vanessa,vanessa',
+    'Elaine': 'Elaine,elaine,Madielaine,madielaine',
+    'Cha': 'Cha,cha,Charity,charity'
 };
 
 export default function ReportGenerator({ }: ReportGeneratorProps) {
@@ -121,6 +133,14 @@ export default function ReportGenerator({ }: ReportGeneratorProps) {
                     return 'Administrative Assistant';
                 case 'Daniella':
                     return 'Marketing Specialist';
+
+                // PEG Team
+                case 'Vanessa':
+                    return 'Protection and Education Group, head';
+                case 'Elaine':
+                    return 'Research Officer III';
+                case 'Cha':
+                    return 'Research Officer';
             }
         }
         return 'Project Technical Assistant II'; // Default fallback
@@ -479,14 +499,14 @@ export default function ReportGenerator({ }: ReportGeneratorProps) {
                         {reportType === 'monthly' && (
                             <div>
                                 <label className="block text-sm font-semibold text-gray-700 mb-2 text-transform: uppercase tracking-wider">Task Owner (Optional)</label>
-                                {selectedObjective === 'IMPACT NXT' || selectedObjective === 'ADMIN' ? (
+                                {selectedObjective === 'IMPACT NXT' || selectedObjective === 'ADMIN' || selectedObjective === 'PEG' ? (
                                     <select
                                         value={selectedAssignee}
                                         onChange={(e) => setSelectedAssignee(e.target.value)}
                                         className="w-full p-2.5 bg-white border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20viewBox%3D%220%200%2020%2020%22%20fill%3D%22none%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cpath%20d%3D%22M5%207L10%2012L15%207%22%20stroke%3D%22%236B7280%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E')] bg-[length:20px_20px] bg-[right_10px_center] bg-no-repeat"
                                     >
                                         <option value="">All Members</option>
-                                        {(selectedObjective === 'IMPACT NXT' ? IMPACT_NXT_MEMBERS : ADMIN_MEMBERS).map(member => (
+                                        {(selectedObjective === 'IMPACT NXT' ? IMPACT_NXT_MEMBERS : selectedObjective === 'ADMIN' ? ADMIN_MEMBERS : PEG_MEMBERS).map(member => (
                                             <option key={member} value={member}>{member}</option>
                                         ))}
                                     </select>
