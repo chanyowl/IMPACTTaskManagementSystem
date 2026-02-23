@@ -24,7 +24,11 @@ export default function TaskManagementBoard() {
     'STEP',
     'HEIRIT',
     'Lab-In-a-Box',
-    'BlueNest'
+    'BlueNest',
+    'CBIG',
+    'ISG',
+    'PEG',
+    'ADMIN'
   ];
 
   // Filter tasks based on selected project

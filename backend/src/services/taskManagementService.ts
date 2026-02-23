@@ -308,12 +308,15 @@ export async function restoreTask(
   });
 
   // Audit log
+  // Create clean state without deleted fields
+  const { deletedAt: _, deletedBy: __, ...cleanTask } = currentTask;
+
   await createAuditLog(
     taskId,
     restoredBy,
-    'status_changed', // Using status_changed or generic updated
+    'status_changed',
     currentTask,
-    { ...currentTask, deletedAt: null } as any,
+    { ...cleanTask, lastModifiedBy: restoredBy } as any,
     'Task restored from trash',
     metadata
   );

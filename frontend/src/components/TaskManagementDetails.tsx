@@ -416,6 +416,10 @@ export default function TaskManagementDetails({ taskId, onClose, onTaskUpdate }:
                   <option value="HEIRIT">HEIRIT</option>
                   <option value="Lab-In-a-Box">Lab-In-a-Box</option>
                   <option value="BlueNest">BlueNest</option>
+                  <option value="CBIG">CBIG</option>
+                  <option value="ISG">ISG</option>
+                  <option value="PEG">PEG</option>
+                  <option value="ADMIN">ADMIN</option>
                 </select>
               ) : (
                 <p

@@ -104,6 +104,10 @@ export default function TaskManagementForm({ onClose, onSuccess }: TaskManagemen
               <option value="HEIRIT">HEIRIT</option>
               <option value="Lab-In-a-Box">Lab-In-a-Box</option>
               <option value="BlueNest">BlueNest</option>
+              <option value="CBIG">CBIG</option>
+              <option value="ISG">ISG</option>
+              <option value="PEG">PEG</option>
+              <option value="ADMIN">ADMIN</option>
             </select>
             <p className="text-xs text-gray-500 mt-1">
               Which project does this task belong to?

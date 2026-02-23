@@ -113,13 +113,14 @@ export async function generateReportData(
         endDate
     });
 
-    // Sub-filter audit logs by objective if objectiveId is provided
-    const filteredAuditLogs = objectiveId
-        ? auditLogs.filter(log => {
-            // Check if the log belongs to one of the tasks in the filtered list
-            return filteredTasks.some(t => t.taskId === log.taskId);
-        })
-        : auditLogs;
+    // Sub-filter audit logs to ONLY include those for currently active/visible tasks
+    // This ensures that deleted tasks (which are not in filteredTasks) never appear in the report
+    const validTaskIds = new Set(filteredTasks.map(t => t.taskId));
+
+    const filteredAuditLogs = auditLogs.filter(log => {
+        // Only include logs for tasks that are part of the target list
+        return validTaskIds.has(log.taskId);
+    });
 
     // Limit audit logs for the report summary
     const complianceTrail = filteredAuditLogs.slice(0, 50);
