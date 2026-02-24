@@ -29,7 +29,7 @@ async function runTest() {
     };
 
     try {
-        const narrative = await generateReportNarrative(mockData);
+        const { narrative } = await generateReportNarrative(mockData);
         console.log('\n=== GENERATED REPORT START ===\n');
         console.log(narrative);
         console.log('\n=== GENERATED REPORT END ===\n');
