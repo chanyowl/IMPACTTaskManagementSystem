@@ -81,6 +81,7 @@ export default function ReportGenerator({ }: ReportGeneratorProps) {
     const [reportPreview, setReportPreview] = useState<any>(null);
     const [error, setError] = useState<string | null>(null);
     const [isEditable, setIsEditable] = useState(false);
+    const [showRevisionLog, setShowRevisionLog] = useState(false);
 
     // DOST Specific State - Removed as per user request for full automation
 
@@ -100,7 +101,7 @@ export default function ReportGenerator({ }: ReportGeneratorProps) {
     useEffect(() => {
         setReportPreview(null);
         setError(null);
-        setError(null);
+        setShowRevisionLog(false);
     }, [reportType, startDate, endDate, selectedObjective, selectedAssignee]);
 
     const getOfficerName = () => {
@@ -401,10 +402,11 @@ export default function ReportGenerator({ }: ReportGeneratorProps) {
                         contentEditable={isEditable}
                         suppressContentEditableWarning={true}
                     >
-                        <h3 className="text-2xl font-bold text-gray-900 mb-6 uppercase border-b-2 border-black pb-4">
-                            Professional Activity Narrative
-                        </h3>
-
+                        <div className="flex justify-between items-center mb-6 border-b-2 border-black pb-4" contentEditable={false}>
+                            <h3 className="text-2xl font-bold text-gray-900 uppercase">
+                                {showRevisionLog ? 'AI Revision Log' : 'Professional Activity Narrative'}
+                            </h3>
+                        </div>
 
                         <div className="prose prose-slate max-w-none text-justify group-focus:outline-none leading-loose">
                             <ReactMarkdown
@@ -416,14 +418,14 @@ export default function ReportGenerator({ }: ReportGeneratorProps) {
                                     td: ({ node, ...props }) => <td className="border border-gray-300 px-4 py-2" {...props} />
                                 }}
                             >
-                                {reportPreview.narrative}
+                                {showRevisionLog ? reportPreview.revisionLog : reportPreview.narrative}
                             </ReactMarkdown>
                         </div>
                     </div>
                 )}
             </div>
         );
-    }, [reportType, reportPreview, startDate, endDate, objectives, isEditable]);
+    }, [reportType, reportPreview, startDate, endDate, objectives, isEditable, showRevisionLog]);
 
     return (
         <div className="max-w-7xl mx-auto px-4 py-8">
@@ -591,6 +593,20 @@ export default function ReportGenerator({ }: ReportGeneratorProps) {
                         </div>
                     </div>
                     <div className="flex gap-4">
+                        {reportPreview?.revisionLog && (
+                            <button
+                                onClick={() => setShowRevisionLog(!showRevisionLog)}
+                                className={`px-6 py-4 rounded-2xl font-bold uppercase tracking-widest text-xs transition-all flex items-center gap-2 ${showRevisionLog
+                                    ? "bg-purple-100 text-purple-800 hover:bg-purple-200 shadow-inner"
+                                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                                    }`}
+                            >
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                                </svg>
+                                {showRevisionLog ? 'Hide Revision Log' : 'View Revision Log'}
+                            </button>
+                        )}
                         <button
                             onClick={() => setIsEditable(!isEditable)}
                             disabled={!reportPreview}

@@ -9,7 +9,10 @@ This is a compliance document. Creativity is FORBIDDEN for structure. You must f
 3. Chapter 1 is ONLY for the overview table and financial reference.
 4. Executive Summary is NOT a chapter. It stands alone before Chapter 1.
 5. NO "I" or "We". Use passive institutional voice ("The project team completed...").
-6. Follow the EXACT paragraph templates defined below.
+6. NEVER invent, hallucinate, or assume information, metrics, or statuses that do not exist in the source data.
+7. If a task is not explicitly marked as 'Done' in the dashboard data, it must be reported as ongoing/planned. Do NOT claim it is finished.
+8. The final report must be a finished product. Do NOT insert placeholders like [DATA NEEDED] or [Insert XYZ here]. Maximize the available data to produce the best reading-ready narrative possible.
+9. Follow the EXACT paragraph templates defined below.
 
 Quarter: {{quarterName}} Quarter
 Period: {{dateRange}}

@@ -41,13 +41,14 @@ const handlePreviewRequest = async (req: Request, res: Response) => {
         const reportData = await generateReportData(startDate, endDate, type, objectiveId, dostInputs, assignee);
 
         // 2. Generate AI narrative
-        const narrative = await generateReportNarrative(reportData);
+        const { narrative, revisionLog } = await generateReportNarrative(reportData);
 
         res.json({
             success: true,
             report: {
                 ...reportData,
-                narrative
+                narrative,
+                revisionLog
             }
         });
     } catch (error: any) {
@@ -80,7 +81,7 @@ router.get('/export', async (req: Request, res: Response) => {
         endDate.setHours(23, 59, 59, 999);
 
         const reportData = await generateReportData(startDate, endDate, type, objectiveId, undefined, assignee);
-        const narrative = await generateReportNarrative(reportData);
+        const { narrative, revisionLog } = await generateReportNarrative(reportData);
 
         const filename = `${type}-report-${startDateRaw}.md`;
 
@@ -90,6 +91,11 @@ router.get('/export', async (req: Request, res: Response) => {
 
         markdown += `## 1. Executive Summary / Activity Narrative\n`;
         markdown += `${narrative}\n\n`;
+
+        if (revisionLog) {
+            markdown += `## 1.A AI Revision Log\n`;
+            markdown += `${revisionLog}\n\n`;
+        }
 
         markdown += `## 2. Quantitative Performance\n`;
         markdown += `- Total Tasks Managed: ${reportData.stats.total}\n`;
